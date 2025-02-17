@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap, LngLatBounds } from "mapbox-gl";
+import { GeoJSON } from "geojson";
 
 mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN as string;
 
@@ -82,9 +83,11 @@ const Map = () => {
 
         // Kliknięcie w punkt przenosi kamerę
         map.current.on("click", "points", (e) => {
-          const coordinates = (
-            e.features![0].geometry as any
-          ).coordinates.slice();
+          if (!e.features || e.features.length === 0) return;
+
+          const geometry = e.features[0].geometry as GeoJSON.Point;
+          const coordinates = geometry.coordinates as [number, number];
+
           flyToLocation(coordinates);
         });
       }
