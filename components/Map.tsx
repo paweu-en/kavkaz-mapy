@@ -137,11 +137,11 @@ const Map = () => {
 
   return (
     <div
-      className='flex-col lg:flex-row-reverse'
+      className='flex-col lg:flex-row-reverse h-screen'
       style={{
         position: "relative",
         width: "100%",
-        height: "100vh",
+        height: "100svh",
         display: "flex",
       }}>
       {/* Panel sterowania */}
