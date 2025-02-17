@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap, LngLatBounds } from "mapbox-gl";
 
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
+mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN as string;
 
 type Location = {
   name: string;
