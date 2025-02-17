@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap, LngLatBounds } from "mapbox-gl";
-import { GeoJSON } from "geojson";
+// import { GeoJSON } from "geojson";
 
 mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN as string;
 
@@ -86,7 +86,7 @@ const Map = () => {
           if (!e.features || e.features.length === 0) return;
 
           const geometry = e.features[0].geometry as GeoJSON.Point;
-          const coordinates = geometry.coordinates as [number, number];
+          const coordinates = geometry.coordinates as [number, number]; // 👈 Rzutowanie na krotkę
 
           flyToLocation(coordinates);
         });
