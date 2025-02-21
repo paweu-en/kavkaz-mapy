@@ -46,8 +46,8 @@ function NavbarTest() {
           // transition={{ duration: 0.5, delay: 0.1 }}
           // style={{ width: isOn ? "" : "100%" }}
         >
-          <Link href='/'>Katalog</Link>
-          <Link href='/'>Dziennik</Link>
+          <Link href='/'>Wyjazdy</Link>
+          <Link href='/'>Blog</Link>
           <Link href='/'>O Nas</Link>
         </div>
       </header>

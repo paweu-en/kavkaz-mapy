@@ -41,20 +41,22 @@ export default function Home() {
         {/* <div className='relative'> */}
         <Map locations={locations} />
         {/* </div> */}
-        {/* <div className='relative'> */}
-        {/* <div className='w-full text-[8vw] p-2 text-center'>
-          INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO
-          INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO
-          INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO
-          INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO
-        </div> */}
-        {/* <div className='w-full text-[8vw] p-2 text-center'>
-          TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-          TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-          TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-          TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-        </div> */}
-        {/* </div> */}
+        <div className='relative'>
+          <div className='w-full text-[8vw] p-2 text-center'>
+            INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO
+            INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO
+            INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO
+            INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO INFO
+            INFO INFO INFO INFO
+          </div>
+          <div className='w-full text-[8vw] p-2 text-center'>
+            TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+            TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+            TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+            TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+            TEST TEST TEST TEST
+          </div>
+        </div>
 
         {/* </div> */}
       </main>
