@@ -1,19 +1,19 @@
 import * as m from "motion/react-m";
 import {} from "motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import mapboxgl, {
   Map as MapboxMap,
   LngLatBounds,
-  MapSourceDataEvent,
+  // MapSourceDataEvent,
 } from "mapbox-gl";
-import { Fjalla_One } from "next/font/google";
-import { AnimatePresence } from "motion/react";
+// import { Fjalla_One } from "next/font/google";
+// import { AnimatePresence } from "motion/react";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
 // Kluczowe punkty do wyświetlenia
 
-const fjallaOne = Fjalla_One({ weight: "400", subsets: ["latin"] });
+// const fjallaOne = Fjalla_One({ weight: "400", subsets: ["latin"] });
 
 const Map = ({ locations }: MapProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -24,7 +24,7 @@ const Map = ({ locations }: MapProps) => {
   const map = useRef<MapboxMap | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [lockMap, setLockMap] = useState(false);
-  const animationFrameId = useRef<number | null>(null);
+  // const animationFrameId = useRef<number | null>(null);
   const [initialMapSize, setInitialMapSize] = useState(0);
   const [expandedMapSize, setExpandedMapSize] = useState(0);
   // Czy mapa jest w pełni załadowana?

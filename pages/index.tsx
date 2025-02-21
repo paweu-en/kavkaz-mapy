@@ -2,7 +2,7 @@ import MapSkeleton from "@/components/MapSkeleton";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useEffect } from "react";
-import * as m from "motion/react-m";
+// import * as m from "motion/react-m";
 
 const locations: Location[] = [
   { name: "Kazbek", coords: [44.977, 42.6954] },
