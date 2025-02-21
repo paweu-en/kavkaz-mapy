@@ -14,9 +14,9 @@ export default function Skeleton({ locations }: MapProps) {
         // initial={{ opacity: 0 }}
         // animate={{ opacity: 1 }}
         // exit={{ opacity: 0 }}
-        // transition={{ duration: 0.5, ease: "easeInOut" }}
-        className='DYNAMIC-SKELETON! container-skeleton relative flex-col lg:flex-row-reverse flex p-2 gap-4'>
-        <div className='w-full h-min text-white flex flex-wrap gap-2'>
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+        className='DYNAMIC-SKELETON! container-skeleton relative flex-col flex p-2 py-8 gap-x-4 gap-y-6 gap-4'>
+        <div className='w-full h-min text-white flex flex-wrap gap-2 justify-center'>
           {AllButtons.map((location) => (
             <button
               key={location.name}

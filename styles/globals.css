@@ -24,7 +24,7 @@ svg {
   height: 100%;
 }
 
-/* @keyframes pulse {
+@keyframes pulse {
   0% {
     background-color: #82817e;
   }
@@ -34,9 +34,10 @@ svg {
   100% {
     background-color: #82817e;
   }
-} */
+}
 
-div.map {
+div.map,
+div.container-skeleton {
   height: 600px;
 }
 
