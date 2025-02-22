@@ -6,6 +6,7 @@ import mapboxgl, {
   LngLatBounds,
   // MapSourceDataEvent,
 } from "mapbox-gl";
+import useDebouncedResize from "@/hooks/useResize";
 // import { AnimatePresence } from "motion/react";
 // import { Fjalla_One } from "next/font/google";
 // import { AnimatePresence } from "motion/react";
@@ -18,6 +19,7 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
 const Map = ({ locations }: MapProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const buttonsRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<HTMLDivElement | null>(null);
   const skeletonRef = useRef<HTMLDivElement | null>(null);
   const backgroundRef = useRef<HTMLDivElement | null>(null);
@@ -25,11 +27,22 @@ const Map = ({ locations }: MapProps) => {
   const map = useRef<MapboxMap | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [lockMap, setLockMap] = useState(false);
-  // const animationFrameId = useRef<number | null>(null);
   const [initialMapSize, setInitialMapSize] = useState(0);
   const [expandedMapSize, setExpandedMapSize] = useState(0);
-  // Czy mapa jest w pełni załadowana?
+  // const [nextElementHeight, setNextElementHeight] = useState(0);
+  // const nextElement = containerRef.current?.nextSibling;
 
+  // useEffect(() => {
+  //   if (nextElement instanceof HTMLElement && lockMap) {
+  //     nextElement.setAttribute("style", `top: ${nextElementHeight}px`);
+  //   }
+
+  //   if (nextElement instanceof HTMLElement && !lockMap) {
+  //     nextElement.removeAttribute("style");
+  //   }
+  // }, [lockMap]);
+
+  // Czy mapa jest w pełni załadowana?
   useEffect(() => {
     if (map.current || !mapRef.current) return;
 
@@ -101,19 +114,24 @@ const Map = ({ locations }: MapProps) => {
         });
       }
     });
-
-    const resizeMap = () => {
-      console.log("RESIZE");
-      if (map.current) {
-        map.current.resize();
-      }
-      // window.dispatchEvent(new Event("resize"));
-      setTimeout(() => resetToAllPoints(), 500);
-    };
-
-    window.addEventListener("resize", resizeMap);
-    return () => window.removeEventListener("resize", resizeMap);
   }, []);
+
+  const resizeMap = () => {
+    console.log("RESIZE");
+
+    containerRef.current?.scrollIntoView({
+      behavior: "instant",
+    });
+    if (!map.current) return;
+    map.current.resize();
+
+    setTimeout(() => {
+      resetToAllPoints();
+    }, 250);
+  };
+
+  const { width, height } = useDebouncedResize(resizeMap, 250);
+  console.log(width, height);
 
   const flyToLocation = (coords: [number, number]) => {
     if (!map.current) return;
@@ -148,30 +166,16 @@ const Map = ({ locations }: MapProps) => {
     });
   };
 
-  useEffect(() => {
-    const height = containerRef.current?.offsetHeight;
-    const nextElement = containerRef.current?.nextSibling;
-
-    if (nextElement instanceof HTMLElement && lockMap) {
-      nextElement.setAttribute("style", `top: 600px`);
-    }
-
-    if (nextElement instanceof HTMLElement && !lockMap) {
-      nextElement.removeAttribute("style");
-    }
-
-    console.log("MAP NEXT EL: ", nextElement);
-    console.log("MAP HEIGHT: ", height);
-  }, [lockMap]);
-
   return (
     <>
       <div
         ref={containerRef}
         id='map'
-        className='map relative w-full flex flex-col p-2 py-8 gap-x-4 gap-y-6 z-[999]'>
+        className='map absolute w-full flex flex-col p-2 py-8 gap-x-4 gap-y-6 z-[999] h-[inherit]'>
         {/* Panel sterowania */}
-        <div className='w-full flex gap-x-2 h-max flex-wrap gap-2 justify-center'>
+        <div
+          ref={buttonsRef}
+          className='w-full flex gap-x-2 h-min flex-wrap gap-2 justify-center'>
           <button
             onClick={resetToAllPoints}
             className='bg-[#82817e] hover:bg-[#2c2c2b] text-white py-2 px-3 rounded-full transition-all'>
@@ -195,11 +199,15 @@ const Map = ({ locations }: MapProps) => {
           ))}
         </div>
         {/* Mapa */}
+        {/* ZMIANA SZEROKOSCI MAPY TO TUTAJ - className w-1/3 i clipPath 66.6% */}
         <div
           ref={maskRef}
           id='map-container'
+          // className={`w-1/2 h-full relative`}
           className={`w-full h-full relative`}
           style={{
+            width: lockMap ? "100%" : undefined,
+            // clipPath: `inset(0 50% ${
             clipPath: `inset(0 0 ${
               lockMap &&
               expandedMapSize &&
@@ -214,6 +222,7 @@ const Map = ({ locations }: MapProps) => {
               isMapLoaded ? "is-loaded" : ""
             } ${lockMap ? "is-locked" : ""}`}
             onClick={() => {
+              // setNextElementHeight(containerRef.current?.offsetHeight || 0);
               setInitialMapSize(
                 skeletonRef.current?.getBoundingClientRect().height || 0
               );
@@ -225,13 +234,17 @@ const Map = ({ locations }: MapProps) => {
               containerRef.current?.classList.add("map-mode");
               backgroundRef.current?.setAttribute(
                 "style",
-                "background-color: #2c2c2b"
+                "background-color: #2c2c2b; transition-delay: 0s"
               );
               containerRef.current?.scrollIntoView({
                 behavior: "smooth",
               });
-              resetToAllPoints();
-              window.dispatchEvent(new Event("resize"));
+
+              setTimeout(() => {
+                resetToAllPoints();
+                if (!map.current) return;
+                map.current.resize();
+              }, 250);
               setTimeout(() => resetToAllPoints(), 500);
               setTimeout(() => {
                 maskRef.current?.classList.add("mask-hidden");
@@ -255,17 +268,25 @@ const Map = ({ locations }: MapProps) => {
               containerRef.current?.removeAttribute("style");
               backgroundRef.current?.removeAttribute("style");
               maskRef.current?.removeAttribute("style");
-              maskRef.current?.classList.remove("mask-hidden");
               setInitialMapSize(0);
               setExpandedMapSize(0);
-              containerRef.current?.classList.remove("map-mode");
               setLockMap(false);
 
               setTimeout(() => {
+                containerRef.current?.classList.remove("map-mode");
+              }, 500);
+              setTimeout(() => {
+                maskRef.current?.classList.remove("mask-hidden");
                 resetToAllPoints();
-                window.dispatchEvent(new Event("resize"));
-              }, 625);
-              setTimeout(() => resetToAllPoints(), 650);
+                if (!map.current) return;
+                map.current.resize();
+              }, 1050);
+              // }, 1500);
+
+              setTimeout(() => {
+                resetToAllPoints();
+              }, 1100);
+              // }, 1550);
             }}></div>
           {/* <button
           onClick={() => console.log("klik")}
@@ -277,9 +298,14 @@ const Map = ({ locations }: MapProps) => {
           </span>
         </button> */}
         </div>
+        {/* <div className='text-[4vw] p-2 flex-1 left-1/2 absolute'>
+          TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+          TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+          TEST TEST TEST TEST
+        </div> */}
         <div
           ref={backgroundRef}
-          className='TEST absolute left-0 z-[-1] w-full h-[100vh] origin-center scale-y-150'
+          className='TEST absolute left-0 z-[-2] w-full h-[100vh] origin-center scale-y-150'
         />
       </div>
     </>
